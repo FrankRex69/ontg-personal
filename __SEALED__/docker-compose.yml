@@ -1,0 +1,21 @@
+
+version: "3"
+services:
+  database:
+    image: mongo:5
+    restart: unless-stopped
+    network_mode: "host"
+    command: mongod --quiet --logpath /dev/null
+  server:
+    build:
+      context: .
+      dockerfile: __SEALED__/Dockerfile
+    restart: unless-stopped
+    network_mode: "host"
+    env_file:
+      - .env
+    volumes:
+      - ./:/usr/src/app
+    depends_on:
+      - "database"
+
